@@ -1,6 +1,11 @@
 package com.apps.rdjsmartapps.androidcrudapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private ItemListAdapter adapter;
     public List<Item> mItemList;
     ListView listView1;
-
+    DBConnect db;
+    ImageUpload imgUpload;
     public static final String TAG = "MainActivity";
 
     @Override
@@ -31,20 +39,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView1 = (ListView) findViewById(R.id.listView1);
-
         mItemList = new ArrayList<>();
-
-        mItemList.add(new Item(1,R.drawable.avatar, "Avatar",4));
-        mItemList.add(new Item(2,R.drawable.mi, "MI 6",2));
-        mItemList.add(new Item(3,R.drawable.ironman, "Iron Man 3",5));
-        mItemList.add(new Item(4,R.drawable.avengers, "Avengers-Infinity War",3));
-        mItemList.add(new Item(5,R.drawable.captainamerica, "Captain America",4));
-        mItemList.add(new Item(6,R.drawable.hulk, "Incredible Hulk",3));
+        imgUpload = new ImageUpload();
 
 
 
+        //get database object
+        db = new DBConnect(this);
+
+
+
+        // Fetch movie list from database
+
+        String queryString = "SELECT * FROM Movie";
+        Cursor c = db.rawQuery(queryString);
+        if(c.getCount()==0)
+        {
+            imgUpload.msg(this, "No records found");
+        }
+
+        StringBuffer buffer=new StringBuffer();
+
+        while(c.moveToNext())
+        {
+            int movie_id = Integer.valueOf(c.getString(0));
+            String movie_name = c.getString(1);
+            int movie_rating = Integer.valueOf(c.getString(2));
+            byte[] imageData = c.getBlob(3);
+            Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+
+            mItemList.add(new Item(movie_id, movie_name,movie_rating,image ));
+        }
+
+
+
+        // Create adapter class object
        adapter = new ItemListAdapter(this, mItemList);
        listView1.setAdapter(adapter);
+
+
+
 
        // set on item click listener
 
@@ -55,15 +89,14 @@ public class MainActivity extends AppCompatActivity {
 
                 String id = view.getTag().toString();
                 int itemId = Integer.valueOf(id);
-                itemId = itemId - 1;
+
                 Intent movieInfo = new Intent(MainActivity.this, MovieInfoActivity.class);
-                movieInfo.putExtra("id", mItemList.get(itemId).getId());
-                movieInfo.putExtra("imageId", mItemList.get(itemId).getImageId());
-                movieInfo.putExtra("movie_name", mItemList.get(itemId).getMovieName());
-                movieInfo.putExtra("rating", mItemList.get(itemId).getRating());
+                movieInfo.putExtra("id", itemId);
                 startActivity(movieInfo);
             }
         });
+
+
 
 
         // ADD fab action button on click listener
@@ -78,5 +111,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
+
+
+
 }

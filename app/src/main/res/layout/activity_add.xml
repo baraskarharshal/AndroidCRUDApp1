@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
     tools:context="com.apps.rdjsmartapps.androidcrudapp.AddActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/movieImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher_background"
+        />
+
+    <Button
+        android:id="@+id/uploadImage"
+        android:text=" Upload Image "
+        android:background="#0091EA"
+        android:textColor="#FFFFFF"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <EditText
+        android:id="@+id/movieName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Movie Name"
+        android:layout_margin="10dp"
+        android:inputType="text"
+        android:layout_gravity="center"
+        />
+
+    <EditText
+        android:id="@+id/rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Rating"
+        android:layout_margin="10dp"
+        android:inputType="number"
+        />
+    <Button
+        android:id="@+id/addMovie"
+        android:text="Add Movie"
+        android:background="#0091EA"
+        android:textColor="#FFFFFF"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

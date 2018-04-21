@@ -50,7 +50,7 @@ public class ItemListAdapter extends BaseAdapter {
 
         // set values
 
-        movieImage.setImageResource(mItemList.get(position).getImageId());
+        movieImage.setImageBitmap(mItemList.get(position).getImage());
         movieName.setText(mItemList.get(position).getMovieName());
         rating.setText(mItemList.get(position).getRating() + "");
 
